@@ -33,7 +33,6 @@ function curl_post($url, array $params = array())
     return ($data);
 }
 
-
 function curl_post_raw($url, $rawData)
 {
     $ch = curl_init();
@@ -75,7 +74,11 @@ function curl_get($url, &$httpCode = 0)
     return $file_contents;
 }
 
-
+/**
+ * getRandChar 生成指定长度随机字符串
+ * @param $length
+ * @return null|string
+ */
 function getRandChar($length)
 {
     $str    = null;
@@ -91,11 +94,12 @@ function getRandChar($length)
     return $str;
 }
 
-
-function fromArrayToModel($m, $array)
+/**
+ * getPassword 生成加密后的密码
+ * @param $password
+ * @return string
+ */
+function getPassword($password)
 {
-    foreach ($array as $key => $value) {
-        $m[$key] = $value;
-    }
-    return $m;
+    return md5(config('app.password_salt').$password);
 }

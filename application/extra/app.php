@@ -7,5 +7,8 @@
  */
 
 return [
-
+    // 密码salt
+    'password_salt' => 'abcdedcba',
+    // token salt
+    'token_salt' => '1a2b3c',
 ];

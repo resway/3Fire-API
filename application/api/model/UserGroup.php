@@ -11,5 +11,5 @@ namespace app\api\model;
 
 class UserGroup extends BaseModel
 {
-    protected $hidden = ['id','create_time','update_time','delete_time'];
+    protected $hidden = ['create_time','update_time','delete_time'];
 }

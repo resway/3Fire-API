@@ -29,11 +29,17 @@ class AppToken extends Token
                'msg' => '登录失败，用户名或密码错误'
             ]);
         } else {
-            $values = $this->_getUserInfoToArray($user);
-            $token = $this->_saveToSession($values);
-            $user->update_ip = \request()->ip();
-            $user->save();
-            return $token;
+            if ($user->status != 1 ) {
+                throw new LoginException([
+                   'msg' => '帐户被锁定，请联系管理员'
+                ]);
+            } else {
+                $values = $this->_getUserInfoToArray($user);
+                $token = $this->_saveToSession($values);
+                $user->update_ip = \request()->ip();
+                $user->save();
+                return $token;
+            }
         }
     }
 

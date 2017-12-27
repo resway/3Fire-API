@@ -14,14 +14,6 @@ class User extends BaseModel
     protected $hidden = ['delete_time','password'];
 
     /**
-     * base  全局查询范围，只查询status=1的数据
-     * @param \think\db\Query $query
-     */
-    protected function base($query) {
-        $query->where('status',1);
-    }
-
-    /**
      * getUserByID 根据id获取用户信息
      * @param $id
      * @return array

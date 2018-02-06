@@ -11,7 +11,7 @@ namespace app\api\service;
 
 use app\api\model\User as UserModel;
 use app\lib\exception\LoginException;
-use think\Session;
+use app\lib\exception\TokenException;
 
 class AppToken extends Token
 {
@@ -35,7 +35,7 @@ class AppToken extends Token
                 ]);
             } else {
                 $values = $this->_getUserInfoToArray($user);
-                $token = $this->_saveToSession($values);
+                $token = $this->_saveToCache($values);
                 $user->update_ip = \request()->ip();
                 $user->save();
                 return $token;
@@ -55,13 +55,21 @@ class AppToken extends Token
     }
 
     /**
-     * _saveToSession 用户信息存入session
+     * _saveToCache
      * @param $values
      * @return string
+     * @throws TokenException
      */
-    private function _saveToSession($values) {
+    private function _saveToCache($values) {
         $token = self::generateToken();
-        Session::set($token,$values);
+        $expire_in = config('app.token_expire_in');
+        $result = cache($token, json_encode($values), $expire_in);
+        if (!$result) {
+            throw new TokenException([
+                'msg' => '服务器缓存异常',
+                'errorCode' => 10005
+            ]);
+        }
         return $token;
     }
 

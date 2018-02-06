@@ -11,6 +11,7 @@ namespace app\api\service;
 use app\lib\enum\GroupEnum;
 use app\lib\exception\ForbiddenException;
 use app\lib\exception\TokenException;
+use think\Cache;
 use think\Exception;
 use think\Request;
 use think\Session;
@@ -37,7 +38,7 @@ class Token
      */
     public static function getCurrentTokenVar($key) {
         $token = Request::instance()->header('token');
-        $vars = Session::get($token);
+        $vars = Cache::get($token);
         if (!$vars) {
             throw new TokenException();
         } else {
@@ -60,7 +61,7 @@ class Token
      */
     public static function getCurrentIdentity($keys = ['uid','username']) {
         $token = Request::instance()->header('token');
-        $identities = Session::get($token);
+        $identities = Cache::get($token);
         if (!$identities) {
             throw new TokenException();
         } else {
@@ -81,7 +82,7 @@ class Token
      * @return bool
      */
     public static function verifyToken($token) {
-        $exist = Session::get($token);
+        $exist = Cache::get($token);
         if($exist) {
             return true;
         } else {
@@ -90,11 +91,11 @@ class Token
     }
 
     /**
-     * removeTokenSession 删除session中的token
+     * removeTokenSession 删除cache中的token
      */
     public static function removeTokenSession() {
         $token = Request::instance()->header('token');
-        Session::delete($token);
+        Cache::rm($token);
     }
 
     /**

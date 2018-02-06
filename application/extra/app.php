@@ -11,4 +11,5 @@ return [
     'password_salt' => 'abcdedcba',
     // token salt
     'token_salt' => '1a2b3c',
+    'token_expire_in' => 7200
 ];
